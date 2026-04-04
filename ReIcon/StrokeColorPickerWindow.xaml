@@ -1,0 +1,186 @@
+<Window x:Class="ReIcon.StrokeColorPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="{DynamicResource Loc_StrokeColorPicker_WindowTitle}"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="Manual"
+        SizeToContent="WidthAndHeight"
+        UseLayoutRounding="True"
+        Loaded="StrokeColorPickerWindow_OnLoaded"
+        Background="{DynamicResource Rs.Window.Background}">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="44"
+                            ResizeBorderThickness="0"
+                            GlassFrameThickness="0"
+                            CornerRadius="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <!-- Ширина контента = сетка 8×(22px + margin 1): 8×24 = 192 -->
+    <Border BorderBrush="{DynamicResource Rs.Border}"
+            BorderThickness="1">
+        <DockPanel>
+            <Border DockPanel.Dock="Top"
+                    Height="44"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,0,0,1"
+                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Background="Transparent"
+                            Padding="12,0,8,0"
+                            MouseLeftButtonDown="TitleBar_OnMouseDown">
+                        <TextBlock Text="{DynamicResource Loc_StrokeColorPicker_TitleBar}"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Rs.Text.Primary}"/>
+                    </Border>
+                    <Button Grid.Column="1"
+                            Click="TitleBarClose_OnClick"
+                            ToolTip="{DynamicResource Loc_StrokeColorPicker_CloseTooltip}"
+                            Style="{DynamicResource Rs.TitleBar.Close}"
+                            Content="&#x00D7;"/>
+                </Grid>
+            </Border>
+
+            <Border Padding="14">
+        <StackPanel Width="192"
+                    HorizontalAlignment="Left">
+            <Border x:Name="ColorPreviewBorder"
+                    Height="36"
+                    Margin="0,0,0,10"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="1"
+                    CornerRadius="4"/>
+
+            <TextBlock FontSize="12"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource Rs.Text.Primary}"
+                       Margin="0,0,0,4"
+                       Text="{DynamicResource Loc_StrokeColorPicker_PresetColors}"/>
+            <UniformGrid x:Name="PresetGrid"
+                         Columns="8"
+                         HorizontalAlignment="Left"/>
+
+            <TextBlock FontSize="12"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource Rs.Text.Primary}"
+                       Margin="0,10,0,4"
+                       Text="{DynamicResource Loc_StrokeColorPicker_Hue}"/>
+            <Grid Width="192"
+                  Height="22"
+                  Margin="0,0,0,4">
+                <Border CornerRadius="2"
+                        BorderBrush="{DynamicResource Rs.Border}"
+                        BorderThickness="1"
+                        ClipToBounds="True">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#FFFF0000" Offset="0"/>
+                            <GradientStop Color="#FFFFFF00" Offset="0.167"/>
+                            <GradientStop Color="#FF00FF00" Offset="0.333"/>
+                            <GradientStop Color="#FF00FFFF" Offset="0.5"/>
+                            <GradientStop Color="#FF0000FF" Offset="0.667"/>
+                            <GradientStop Color="#FFFF00FF" Offset="0.833"/>
+                            <GradientStop Color="#FFFF0000" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <Canvas x:Name="HueStripCanvas"
+                        Background="Transparent"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="HueStripCanvas_OnMouseLeftButtonDown"
+                        MouseMove="HueStripCanvas_OnMouseMove"
+                        MouseLeftButtonUp="HueStripCanvas_OnMouseLeftButtonUp"
+                        LostMouseCapture="HueStripCanvas_OnLostMouseCapture"
+                        SizeChanged="HueStripCanvas_OnSizeChanged">
+                    <Ellipse x:Name="HueThumbEllipse"
+                             Width="12"
+                             Height="12"
+                             Stroke="White"
+                             StrokeThickness="2"
+                             Fill="Transparent"/>
+                </Canvas>
+            </Grid>
+
+            <TextBlock FontSize="12"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource Rs.Text.Primary}"
+                       Margin="0,8,0,4"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Text="{DynamicResource Loc_StrokeColorPicker_SaturationBrightness}"/>
+            <Border BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="1"
+                    Width="168"
+                    Height="168"
+                    HorizontalAlignment="Center"
+                    ClipToBounds="True"
+                    CornerRadius="2">
+                <Grid>
+                    <Image x:Name="SvPlaneImage"
+                           Width="168"
+                           Height="168"
+                           Stretch="Fill"/>
+                    <Canvas x:Name="SvPlaneCanvas"
+                            Width="168"
+                            Height="168"
+                            Background="Transparent"
+                            MouseLeftButtonDown="SvPlaneCanvas_OnMouseLeftButtonDown"
+                            MouseMove="SvPlaneCanvas_OnMouseMove"
+                            MouseLeftButtonUp="SvPlaneCanvas_OnMouseLeftButtonUp"
+                            LostMouseCapture="SvPlaneCanvas_OnLostMouseCapture">
+                        <Ellipse x:Name="SvCursorEllipse"
+                                 Width="14"
+                                 Height="14"
+                                 Stroke="White"
+                                 StrokeThickness="2"
+                                 Fill="Transparent"/>
+                    </Canvas>
+                </Grid>
+            </Border>
+
+            <TextBox x:Name="HexBox"
+                     MaxLength="7"
+                     Width="78"
+                     MinHeight="0"
+                     Height="22"
+                     HorizontalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Margin="0,10,0,0"
+                     Padding="4,0"
+                     FontFamily="Consolas"
+                     FontSize="11"
+                     TextAlignment="Center"
+                     ToolTip="{DynamicResource Loc_StrokeColorPicker_HexTooltip}"
+                     TextChanged="HexBox_OnTextChanged"/>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,12,0,0">
+                <Button MinWidth="88"
+                        Margin="0,0,8,0"
+                        Padding="10,6"
+                        Style="{DynamicResource Rs.Button}"
+                        Content="{DynamicResource Loc_StrokeColorPicker_Cancel}"
+                        Click="BtnCancel_OnClick"/>
+                <Button MinWidth="88"
+                        Padding="10,6"
+                        Style="{DynamicResource Rs.Button.Accent}"
+                        Content="{DynamicResource Loc_StrokeColorPicker_Done}"
+                        Click="BtnOk_OnClick"/>
+            </StackPanel>
+            </StackPanel>
+            </Border>
+        </DockPanel>
+    </Border>
+</Window>

@@ -1,0 +1,370 @@
+<Window x:Class="ReIcon.RoundCornersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="{DynamicResource Loc_RoundCornersWindow_WindowTitle}"
+        SizeToContent="Manual"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        UseLayoutRounding="True"
+        Background="{DynamicResource Rs.Window.Background}">
+    <Window.Resources>
+        <Style x:Key="Rs.Preview.ToggleCircleButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Circle"
+                                Width="40"
+                                Height="40"
+                                CornerRadius="20"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="1"
+                                BorderBrush="Transparent"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Circle" Property="BorderBrush" Value="{DynamicResource Rs.Accent.Dim}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Circle" Property="BorderBrush" Value="{DynamicResource Rs.Accent.Dim}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="52"
+                            ResizeBorderThickness="0"
+                            GlassFrameThickness="0"
+                            CornerRadius="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource Rs.Window.Background}"
+            BorderBrush="{DynamicResource Rs.Border}"
+            BorderThickness="1">
+        <DockPanel>
+            <!-- Общая ширина ползунков (одинаковый вид в обеих колонках). -->
+            <DockPanel.Resources>
+                <Style x:Key="RoundCorners.Slider" TargetType="Slider" BasedOn="{StaticResource {x:Type Slider}}">
+                    <Setter Property="Width" Value="176"/>
+                    <Setter Property="MinHeight" Value="0"/>
+                    <!-- Высота до масштаба; ScaleY — визуальная высота дорожки и бегунка. -->
+                    <Setter Property="Height" Value="36"/>
+                    <Setter Property="LayoutTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1" ScaleY="0.88"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="IsSnapToTickEnabled" Value="True"/>
+                    <Setter Property="TickFrequency" Value="1"/>
+                    <Setter Property="TickPlacement" Value="None"/>
+                    <!-- Клик по дорожке + перетаскивание без отпускания кнопки — см. RoundCornersSlider_* в code-behind. -->
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="RoundCornersSlider_PreviewMouseLeftButtonDown"/>
+                    <EventSetter Event="PreviewMouseMove" Handler="RoundCornersSlider_PreviewMouseMove"/>
+                    <EventSetter Event="PreviewMouseLeftButtonUp" Handler="RoundCornersSlider_PreviewMouseLeftButtonUp"/>
+                    <EventSetter Event="LostMouseCapture" Handler="RoundCornersSlider_LostMouseCapture"/>
+                    <EventSetter Event="PreviewMouseWheel" Handler="RoundCornersSlider_PreviewMouseWheel"/>
+                </Style>
+            </DockPanel.Resources>
+            <Border DockPanel.Dock="Top"
+                    Height="52"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,0,0,1"
+                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Background="Transparent"
+                            Padding="16,0,8,0"
+                            MouseLeftButtonDown="TitleBar_OnMouseDown">
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="ReIcon"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Cursor="Hand"
+                                           MouseLeftButtonDown="TitleBarAbout_OnMouseLeftButtonDown"/>
+                                <Button Click="TitleBarAbout_OnClick"
+                                        Style="{StaticResource Rs.TitleBar.AboutInfo}"/>
+                            </StackPanel>
+                            <TextBlock Margin="0,2,0,0"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource Rs.Text.Muted}"
+                                       Text="{DynamicResource Loc_RoundCornersWindow_Subtitle}"/>
+                        </StackPanel>
+                    </Border>
+                    <Button Grid.Column="1"
+                            Click="TitleBarClose_OnClick"
+                            ToolTip="{DynamicResource Loc_MainWindow_TooltipClose}"
+                            Style="{StaticResource Rs.TitleBar.Close}"
+                            Content="&#x00D7;"/>
+                </Grid>
+            </Border>
+
+            <Border DockPanel.Dock="Bottom"
+                    Padding="16,12"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="TogglePreviewBgButton"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource Rs.Preview.ToggleCircleButton}"
+                            Click="TogglePreviewBg_OnClick"
+                            ToolTip="{DynamicResource Loc_RoundCornersWindow_PreviewLightTooltip}"
+                            ToolTipService.InitialShowDelay="100">
+                        <TextBlock x:Name="TogglePreviewBgGlyph"
+                                   FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                   Text="&#xE706;"
+                                   FontSize="18"/>
+                    </Button>
+                    <StackPanel Grid.Column="1">
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="1"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Скругление: строка 0 — заголовок; строка 1 — ползунок (на одной линии с ползунком обводки); строка 2 — значение -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Width="176"
+                                   HorizontalAlignment="Right"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Top"
+                                   Margin="0,8,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Rs.Text.Primary}"
+                                   Text="{DynamicResource Loc_RoundCornersWindow_LabelRound}"/>
+                        <Slider x:Name="RadiusSlider"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource RoundCorners.Slider}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,6,0,0"
+                                Minimum="0"
+                                Maximum="100"
+                                Value="0"
+                                ValueChanged="RadiusSlider_OnValueChanged"/>
+                        <TextBlock x:Name="RadiusValueText"
+                                   Grid.Row="2"
+                                   Grid.Column="0"
+                                   Width="176"
+                                   HorizontalAlignment="Right"
+                                   TextAlignment="Center"
+                                   Margin="0,-7,0,0"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource Rs.Text.Primary}"
+                                   Text="0 px"/>
+
+                        <Border Grid.Row="0"
+                                Grid.Column="1"
+                                Grid.RowSpan="3"
+                                Width="1"
+                                Margin="24,0,25,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Background="{DynamicResource Rs.Border}"/>
+
+                        <!-- Обводка: блок целиком слева у разделителя; внутри — по центру относительно ширины блока -->
+                        <Grid Grid.Row="0"
+                              Grid.Column="2"
+                              Grid.RowSpan="3"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Margin="0,0,0,6">
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Rs.Text.Primary}"
+                                           Text="{DynamicResource Loc_RoundCornersWindow_LabelStroke}"/>
+                                <StackPanel x:Name="StrokeColorControlsPanel"
+                                            Orientation="Horizontal"
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center">
+                                    <Border x:Name="StrokeColorSwatch"
+                                            Width="22"
+                                            Height="22"
+                                            Margin="0,0,5,0"
+                                            VerticalAlignment="Center"
+                                            BorderBrush="{DynamicResource Rs.Border}"
+                                            BorderThickness="1"
+                                            CornerRadius="2"
+                                            Cursor="Hand"
+                                            MouseLeftButtonDown="StrokeColorSwatch_OnMouseLeftButtonDown"
+                                            ToolTip="{DynamicResource Loc_RoundCornersWindow_StrokeColorTooltip}"/>
+                                    <TextBox x:Name="StrokeColorHex"
+                                             Width="58"
+                                             MaxLength="7"
+                                             Padding="4,2"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas"
+                                             FontSize="11"
+                                             ToolTip="{DynamicResource Loc_RoundCornersWindow_HexTooltip}"
+                                             TextChanged="StrokeColorHex_OnTextChanged"
+                                             LostFocus="StrokeColorHex_OnLostFocus"
+                                             KeyDown="StrokeColorHex_OnKeyDown"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <Slider x:Name="StrokeWidthSlider"
+                                    Grid.Row="1"
+                                    Style="{StaticResource RoundCorners.Slider}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Minimum="0"
+                                    Maximum="32"
+                                    Value="0"
+                                    ValueChanged="StrokeWidthSlider_OnValueChanged"/>
+                            <TextBlock x:Name="StrokeWidthValueText"
+                                       Grid.Row="2"
+                                       Width="176"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Margin="0,-7,0,0"
+                                       FontSize="13"
+                                       Foreground="{DynamicResource Rs.Text.Primary}"
+                                       Text="0 px"/>
+                        </Grid>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                    <Button x:Name="BtnBack"
+                            MinWidth="50"
+                            Margin="0,0,12,0"
+                            Padding="14,8"
+                            Style="{StaticResource Rs.Button}"
+                            Click="BtnBack_OnClick"
+                            PreviewMouseRightButtonDown="BtnBack_OnPreviewMouseRightButtonDown"
+                            ToolTip="{DynamicResource Loc_RoundCornersWindow_TooltipBack}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                       Text="&#xE72B;"
+                                       FontSize="10"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Rs.Text.Primary}"/>
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{DynamicResource Loc_RoundCornersWindow_BtnBack}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button MinWidth="160"
+                            Margin="0,0,12,0"
+                            Padding="14,8"
+                            Style="{StaticResource Rs.Button}"
+                            Click="BtnSavePng_OnClick"
+                            ToolTip="{DynamicResource Loc_RoundCornersWindow_TooltipSavePng}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                       Text="&#xE74E;"
+                                       FontSize="15"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Rs.Text.Primary}"/>
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{DynamicResource Loc_RoundCornersWindow_BtnSavePng}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button MinWidth="160"
+                            Padding="14,8"
+                            Style="{StaticResource Rs.Button.Accent}"
+                            Click="BtnConvertToIco_OnClick"
+                            ToolTip="{DynamicResource Loc_RoundCornersWindow_TooltipNext}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                       Text="&#xE73E;"
+                                       FontSize="15"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{DynamicResource Loc_RoundCornersWindow_BtnNext}"/>
+                        </StackPanel>
+                    </Button>
+                    </StackPanel>
+                    </StackPanel>
+                    <Border Grid.Column="2"
+                            Width="{Binding ActualWidth, ElementName=TogglePreviewBgButton}"
+                            Height="1"/>
+                </Grid>
+            </Border>
+
+            <Grid Margin="20,16,20,16">
+                <Border BorderBrush="{DynamicResource Rs.Border}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        ClipToBounds="True">
+                    <Grid>
+                        <Border x:Name="PreviewAnimatedBackground"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                CornerRadius="8"
+                                Background="#0D1117"/>
+                        <Border Background="Transparent"
+                                Padding="12">
+                    <ScrollViewer x:Name="PreviewScroll"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="Transparent">
+                        <Image x:Name="PreviewImage"
+                               Stretch="Fill"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               SnapsToDevicePixels="False"
+                               MouseLeftButtonDown="PreviewImage_OnMouseLeftButtonDown"
+                               MouseMove="PreviewImage_OnMouseMove"
+                               MouseLeftButtonUp="PreviewImage_OnMouseLeftButtonUp"
+                               LostMouseCapture="PreviewImage_OnLostMouseCapture"
+                               RenderOptions.BitmapScalingMode="Fant"/>
+                    </ScrollViewer>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </DockPanel>
+    </Border>
+</Window>

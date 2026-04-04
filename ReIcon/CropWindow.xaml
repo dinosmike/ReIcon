@@ -1,0 +1,119 @@
+<Window x:Class="ReIcon.CropWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:controls="clr-namespace:ReIcon.Controls"
+        Title="{DynamicResource Loc_CropWindow_WindowTitle}"
+        SizeToContent="Manual"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="{DynamicResource Rs.Window.Background}">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="52"
+                            ResizeBorderThickness="0"
+                            GlassFrameThickness="0"
+                            CornerRadius="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource Rs.Window.Background}"
+            BorderBrush="{DynamicResource Rs.Border}"
+            BorderThickness="1">
+        <DockPanel>
+            <Border DockPanel.Dock="Top"
+                    Height="52"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,0,0,1"
+                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Background="Transparent"
+                            Padding="16,0,8,0"
+                            MouseLeftButtonDown="TitleBar_OnMouseDown">
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="ReIcon"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Cursor="Hand"
+                                           MouseLeftButtonDown="TitleBarAbout_OnMouseLeftButtonDown"/>
+                                <Button Click="TitleBarAbout_OnClick"
+                                        Style="{StaticResource Rs.TitleBar.AboutInfo}"/>
+                            </StackPanel>
+                            <TextBlock Margin="0,2,0,0"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource Rs.Text.Muted}"
+                                       Text="{DynamicResource Loc_CropWindow_Subtitle}"/>
+                        </StackPanel>
+                    </Border>
+                    <Button Grid.Column="1"
+                            Click="TitleBarClose_OnClick"
+                            ToolTip="{DynamicResource Loc_MainWindow_TooltipClose}"
+                            Style="{StaticResource Rs.TitleBar.Close}"
+                            Content="&#x00D7;"/>
+                </Grid>
+            </Border>
+
+            <Border DockPanel.Dock="Bottom"
+                    Padding="16,12"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button x:Name="BtnBack"
+                            MinWidth="140"
+                            Margin="0,0,12,0"
+                            Padding="14,8"
+                            Style="{StaticResource Rs.Button}"
+                            Click="BtnBack_OnClick"
+                            PreviewMouseRightButtonDown="BtnBack_OnPreviewMouseRightButtonDown"
+                            ToolTip="{DynamicResource Loc_CropWindow_TooltipBack}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                       Text="&#xE72B;"
+                                       FontSize="10"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Rs.Text.Primary}"/>
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{DynamicResource Loc_CropWindow_BtnBack}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button MinWidth="140"
+                            Padding="14,8"
+                            Style="{StaticResource Rs.Button.Accent}"
+                            Click="BtnCrop_OnClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                       Text="&#xE73E;"
+                                       FontSize="15"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{DynamicResource Loc_CropWindow_BtnCrop}"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <ScrollViewer x:Name="CropScroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="12"
+                          Background="{DynamicResource Rs.Window.Background}">
+                <controls:ImageCropPanel x:Name="CropPanel"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

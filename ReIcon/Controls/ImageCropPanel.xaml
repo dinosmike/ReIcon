@@ -1,0 +1,21 @@
+<UserControl x:Class="ReIcon.Controls.ImageCropPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid x:Name="RootGrid"
+          ClipToBounds="False"
+          Background="Transparent"
+          MouseLeftButtonDown="RootGrid_OnMouseLeftButtonDown"
+          MouseMove="RootGrid_OnMouseMove"
+          MouseLeftButtonUp="RootGrid_OnMouseLeftButtonUp"
+          MouseLeave="RootGrid_OnMouseLeave">
+        <Grid x:Name="ContentInner">
+            <Image x:Name="PreviewImage"
+                   Stretch="Fill"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   SnapsToDevicePixels="False"
+                   RenderOptions.BitmapScalingMode="Fant"/>
+            <Canvas x:Name="OverlayCanvas" Background="Transparent"/>
+        </Grid>
+    </Grid>
+</UserControl>

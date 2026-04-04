@@ -1,0 +1,207 @@
+<Window x:Class="ReIcon.PreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="{DynamicResource Loc_PreviewWindow_WindowTitle}"
+        Width="740"
+        Height="430"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        UseLayoutRounding="True"
+        Background="{DynamicResource Rs.Window.Background}">
+    <Window.Resources>
+        <Style x:Key="Rs.Preview.ToggleCircleButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Circle"
+                                Width="40"
+                                Height="40"
+                                CornerRadius="20"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="1"
+                                BorderBrush="Transparent"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Circle" Property="BorderBrush" Value="{DynamicResource Rs.Accent.Dim}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Circle" Property="BorderBrush" Value="{DynamicResource Rs.Accent.Dim}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="52"
+                            ResizeBorderThickness="0"
+                            GlassFrameThickness="0"
+                            CornerRadius="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border Background="{DynamicResource Rs.Window.Background}"
+            BorderBrush="{DynamicResource Rs.Border}"
+            BorderThickness="1">
+        <DockPanel>
+            <Border DockPanel.Dock="Top"
+                    Height="52"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,0,0,1"
+                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Background="Transparent"
+                            Padding="16,0,8,0"
+                            MouseLeftButtonDown="TitleBar_OnMouseDown">
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="ReIcon"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Cursor="Hand"
+                                           MouseLeftButtonDown="TitleBarAbout_OnMouseLeftButtonDown"/>
+                                <Button Click="TitleBarAbout_OnClick"
+                                        Style="{StaticResource Rs.TitleBar.AboutInfo}"/>
+                            </StackPanel>
+                            <TextBlock Margin="0,2,0,0"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource Rs.Text.Muted}"
+                                       Text="{DynamicResource Loc_PreviewWindow_Subtitle}"/>
+                        </StackPanel>
+                    </Border>
+                    <Button Grid.Column="1"
+                            Click="TitleBarClose_OnClick"
+                            ToolTip="{DynamicResource Loc_MainWindow_TooltipClose}"
+                            Style="{StaticResource Rs.TitleBar.Close}"
+                            Content="&#x00D7;"/>
+                </Grid>
+            </Border>
+
+            <Border DockPanel.Dock="Bottom"
+                    Padding="16,12"
+                    Background="{DynamicResource Rs.Surface}"
+                    BorderBrush="{DynamicResource Rs.Border}"
+                    BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="TogglePreviewBgButton"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Rs.Preview.ToggleCircleButton}"
+                            Click="TogglePreviewBg_OnClick"
+                            ToolTip="{DynamicResource Loc_PreviewWindow_PreviewLightTooltip}"
+                            ToolTipService.InitialShowDelay="100">
+                        <!-- Начальный глиф = ToggleGlyphWhenPreviewDark в PreviewWindow.xaml.cs -->
+                        <TextBlock x:Name="TogglePreviewBgGlyph"
+                                   FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                   Text="&#xE706;"
+                                   FontSize="18"/>
+                    </Button>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Button x:Name="BtnBack"
+                                MinWidth="130"
+                                MinHeight="40"
+                                Margin="0,0,12,0"
+                                Padding="14,8"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource Rs.Button}"
+                                Click="BtnBack_OnClick"
+                                PreviewMouseRightButtonDown="BtnBack_OnPreviewMouseRightButtonDown"
+                                ToolTip="{DynamicResource Loc_PreviewWindow_TooltipBack}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                           Text="&#xE72B;"
+                                           FontSize="10"
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource Rs.Text.Primary}"/>
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="{DynamicResource Loc_PreviewWindow_BtnBack}"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnSave"
+                                MinWidth="130"
+                                MinHeight="40"
+                                Padding="14,8"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource Rs.Button.Accent}"
+                                Click="BtnSave_OnClick">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="pack://application:,,,/Fonts/#Segoe MDL2 Assets"
+                                           Text="&#xE73E;"
+                                           FontSize="15"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Margin="8,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="{DynamicResource Loc_PreviewWindow_BtnSaveIco}"/>
+                            </StackPanel>
+                        </Button>
+                        <!-- Фиксированная ширина: галочка не влияет на раскладку кнопок -->
+                        <Grid Width="48"
+                              VerticalAlignment="Center"
+                              Margin="0">
+                            <TextBlock x:Name="SaveSuccessCheckGlyph"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="&#x2713;"
+                                       FontSize="27"
+                                       Foreground="#4CAF50"/>
+                        </Grid>
+                    </StackPanel>
+                    <Border Grid.Column="2"
+                            Width="{Binding ActualWidth, ElementName=TogglePreviewBgButton}"
+                            Height="1"/>
+                </Grid>
+            </Border>
+
+            <ScrollViewer x:Name="PreviewScrollViewer"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Disabled"
+                          Padding="0"
+                          Background="Transparent">
+                <Grid>
+                    <Border x:Name="PreviewAnimatedBackground"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                    <Grid Margin="26,22,16,12">
+                        <StackPanel x:Name="PreviewRow"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    UseLayoutRounding="True"/>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

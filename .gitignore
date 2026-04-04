@@ -1,0 +1,34 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Publish folder (dotnet publish / build-release.bat)
+publish/
+
+# Visual Studio / Rider / VS Code / Cursor
+.vs/
+.idea/
+.cursor/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+**/packages/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Archives
+*.zip
+
+# Misc
+*.cache
+*.tmp
+*.log
