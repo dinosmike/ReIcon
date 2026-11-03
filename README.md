@@ -21,7 +21,7 @@
 Поддерживаемые форматы на входе: PNG, JPEG, WebP, BMP, GIF, TIFF, TGA (через ImageSharp).
 
 ## Скриншот
-![скрин](https://images2.imgbox.com/11/c4/CL2sWqGB_o.jpg)
+![скрин](docs/screenshot.jpg)
 
 ## Сборка из исходников
 
