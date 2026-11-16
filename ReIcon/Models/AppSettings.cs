@@ -18,6 +18,14 @@ public sealed class AppSettings
         set => Ui.Language = value;
     }
 
+    /// <summary>Галочка «Проверять обновления» (модуль ReUpdate). Включена по умолчанию.</summary>
+    [JsonIgnore]
+    public bool AutoUpdate
+    {
+        get => Ui.AutoUpdate;
+        set => Ui.AutoUpdate = value;
+    }
+
     /// <summary>Новый файл настроек: язык не задан — берётся из системы до первого выбора в UI.</summary>
     public static AppSettings CreateDefault() => new()
     {
@@ -29,6 +37,8 @@ public sealed class AppSettings
 public sealed class UiAppearanceSettings
 {
     public string? Language { get; set; }
+
+    public bool AutoUpdate { get; set; } = true;
 }
 
 public sealed class SettingsMeta

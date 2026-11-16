@@ -58,6 +58,16 @@ public partial class App : Application
             Timeout.Infinite,
             executeOnlyOnce: false);
 
+        // Модуль ReUpdate: автообновление с GitHub и «Что нового» (см. ReUpdate\КАК ПОДКЛЮЧИТЬ.md).
+        ReUpdate.ReUpdateConfig.Owner = "dinosmike";
+        ReUpdate.ReUpdateConfig.Repo = "ReIcon";
+        ReUpdate.ReUpdateConfig.AssetName = "ReIcon.exe";
+        ReUpdate.ReUpdateConfig.AppDataFolderName = "ReIcon";
+        ReUpdate.ReUpdateConfig.Language = () => LocalizationService.CurrentLanguageCode;
+        ReUpdate.ReUpdateConfig.AutoUpdateEnabled = () => SettingsStorage.Load().AutoUpdate;
+        ReUpdate.Updater.CleanupAfterUpdate();
+        ReUpdate.WhatsNewState.Initialize();
+
         base.OnStartup(e);
 
         ThemeService.Apply(UiTheme.Dark);
@@ -71,8 +81,11 @@ public partial class App : Application
         using var icon = AppIconFactory.CreateApplicationIcon(UiTheme.Dark);
         var wpfIcon = ToImageSource(icon);
 
-        MainWindow = new MainWindow { Icon = wpfIcon };
-        MainWindow.Show();
+        var mainWindow = new MainWindow { Icon = wpfIcon };
+        MainWindow = mainWindow;
+        mainWindow.Show();
+
+        ReUpdate.Updater.Start();
     }
 
     internal void RefreshIconsForTheme(UiTheme theme)

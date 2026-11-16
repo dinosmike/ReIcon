@@ -46,6 +46,8 @@
   "About.AuthorLine": "Автор программы: Михаил Крылов",
   "About.DonatePrefix": "Отправить донат",
   "About.DonateLink": "можно здесь",
+  "About.AutoUpdate": "Проверять обновления",
+  "About.WhatsNew": "Что нового",
   "About.TooltipTelegram": "Написать автору в Telegram",
   "About.TooltipGithub": "Мои программы на GitHub",
   "About.Ok": "OK",

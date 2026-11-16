@@ -120,6 +120,40 @@
                                Foreground="{DynamicResource Rs.Text.Primary}"
                                Text="{DynamicResource Loc_About_Description}"/>
 
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox x:Name="AutoUpdateCheck"
+                                  Grid.Column="0"
+                                  Margin="0"
+                                  VerticalAlignment="Center"
+                                  Checked="AutoUpdateCheck_OnChanged"
+                                  Unchecked="AutoUpdateCheck_OnChanged">
+                            <TextBlock TextWrapping="Wrap"
+                                       Text="{DynamicResource Loc_About_AutoUpdate}"/>
+                        </CheckBox>
+                        <!-- «Что нового» с точкой, пока новое не прочитано (модуль ReUpdate). -->
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                            <TextBlock FontSize="13">
+                                <Hyperlink Style="{StaticResource Rs.About.DonateLink}"
+                                           Click="WhatsNew_OnClick">
+                                    <Run Text="{DynamicResource Loc_About_WhatsNew}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                            <Ellipse x:Name="WhatsNewDotAbout"
+                                     Width="7" Height="7"
+                                     Margin="4,0,0,6"
+                                     VerticalAlignment="Center"
+                                     Fill="{DynamicResource Rs.Accent}"
+                                     Visibility="Collapsed"/>
+                        </StackPanel>
+                    </Grid>
+
                     <Grid Margin="0,14,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

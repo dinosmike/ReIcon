@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using ReIcon.Services;
 
 namespace ReIcon;
 
@@ -17,6 +18,11 @@ public partial class About
 
     private void About_OnLoaded(object sender, RoutedEventArgs e)
     {
+        AutoUpdateCheck.IsChecked = SettingsStorage.Load().AutoUpdate;
+        UpdateWhatsNewDot();
+        ReUpdate.WhatsNewState.Changed += UpdateWhatsNewDot;
+        Closed += (_, _) => ReUpdate.WhatsNewState.Changed -= UpdateWhatsNewDot;
+
         try
         {
             var uri = new Uri("pack://application:,,,/app.ico");
@@ -45,6 +51,18 @@ public partial class About
         {
             // оставляем пустую иконку при ошибке декодирования
         }
+    }
+
+    private void UpdateWhatsNewDot() =>
+        WhatsNewDotAbout.Visibility = ReUpdate.WhatsNewState.HasUnseen ? Visibility.Visible : Visibility.Collapsed;
+
+    private void WhatsNew_OnClick(object sender, RoutedEventArgs e) => ReUpdate.WhatsNewWindow.ShowFor(this);
+
+    private void AutoUpdateCheck_OnChanged(object sender, RoutedEventArgs e)
+    {
+        var settings = SettingsStorage.Load();
+        settings.AutoUpdate = AutoUpdateCheck.IsChecked == true;
+        SettingsStorage.Save(settings);
     }
 
     private void SocialLink_OnClick(object sender, RoutedEventArgs e)

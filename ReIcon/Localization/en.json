@@ -46,6 +46,8 @@
   "About.AuthorLine": "Author: Mikhail Krylov",
   "About.DonatePrefix": "You can send a donation",
   "About.DonateLink": "here",
+  "About.AutoUpdate": "Check for updates",
+  "About.WhatsNew": "What's new",
   "About.TooltipTelegram": "Message the author on Telegram",
   "About.TooltipGithub": "My projects on GitHub",
   "About.Ok": "OK",
